@@ -422,7 +422,6 @@ function App() {
     [],
   )
 
-  // Layout with nav and highlight logic
   function Layout({ children }) {
     const location = useLocation();
 
