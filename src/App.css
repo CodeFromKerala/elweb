@@ -3040,8 +3040,11 @@ body::before {
 
 /* ─── Low-End Device Optimizations ─────────────────────────── */
 @media (max-width: 768px) and (hover: none) {
-  * {
+  *:not(.marquee-track) {
     animation-duration: 0.3s !important;
+  }
+.marquee-track {
+    animation-duration: 40s !important;
   }
 
   backdrop-filter {
