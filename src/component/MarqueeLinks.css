@@ -21,8 +21,10 @@
 .marquee-track {
   display: flex;
   align-items: center;
-  animation: marquee-scroll 18s linear infinite;
+  animation: marquee-scroll 30s linear infinite;
   gap: 2.5rem;
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .marquee-link {
@@ -50,5 +52,17 @@
   }
   100% {
     transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 768px) {
+  .marquee-track {
+    animation: marquee-scroll 40s linear infinite;
+    gap: 1.5rem;
+  }
+
+  .marquee-link {
+    font-size: 0.95rem;
+    padding: 0.4rem 0.6rem;
   }
 }
