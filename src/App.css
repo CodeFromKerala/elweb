@@ -1082,6 +1082,13 @@ body::before {
   line-height: 0;
 }
 
+/* this should fix the footer overlap on mobiles*/
+@media (max-width: 767px) {
+  .sf {
+    padding-bottom: 4rem;
+  }
+}
+
 @media (min-width: 768px) {
   .sf {
     min-height: 100vh;
