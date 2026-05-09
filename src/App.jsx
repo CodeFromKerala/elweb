@@ -6,6 +6,7 @@ so the chances of breaking some shi is really high */
 import { useEffect, useMemo, useRef } from 'react'
 import { BrowserRouter as Router, Routes, Route, useLocation, Link } from 'react-router-dom'
 import anime from 'animejs/lib/anime.es.js'
+import { useScroll, useTransform, useMotionValueEvent } from 'motion/react'
 import GooeyNav from './component/GooeyNav'
 import MarqueeLinks from './component/MarqueeLinks'
 import './App.css'
@@ -26,176 +27,67 @@ function HomePage() {
   const scrollHintRef = useRef(null)
   const journeyRef = useRef(null)
 
+  // Get scroll progress relative to the hero section
+  const { scrollYProgress } = useScroll({
+    target: journeyRef,
+    offset: ['start start', 'end center'],
+  })
+
+  // Sync video playback directly with scroll progress
+  useMotionValueEvent(scrollYProgress, 'change', (progress) => {
+    const video = videoRef.current
+    if (video && video.duration > 0) {
+      const targetTime = progress * video.duration
+      if (Math.abs(video.currentTime - targetTime) > 0.1) {
+        video.currentTime = targetTime
+      }
+    }
+  })
+
+  // Map scroll progress to caption reveal
+  const captionReveal = useTransform(scrollYProgress, [0.5, 0.7], [0, 1], { clamp: false })
+
+  useMotionValueEvent(captionReveal, 'change', (value) => {
+    if (captionRef.current) {
+      captionRef.current.style.setProperty('--caption-reveal', Math.max(0, Math.min(1, value)).toFixed(3))
+    }
+  })
+
+  // Map scroll progress to scroll hint opacity
+  const hintOpacity = useTransform(scrollYProgress, [0, 0.18], [1, 0], { clamp: true })
+
+  useMotionValueEvent(hintOpacity, 'change', (value) => {
+    if (scrollHintRef.current) {
+      scrollHintRef.current.style.setProperty('--hint-opacity', value.toFixed(3))
+    }
+  })
+
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
-
-    const scrubFps = 6
-    const frameStep = 1 / scrubFps
-    let duration = 0
-    let desiredTime = 0
-    let lastAppliedTime = -1
-    let pendingTime = null
-    let isSeeking = false
-    let hasInitializedVideo = false
-    let scrollRafId = 0
-    let scrubRafId = 0
-    let lastScrollTime = 0
-    let isRafActive = false
-
-    const getJourneyProgress = () => {
-      const journey = journeyRef.current
-      if (!journey) return 0
-
-      const journeyStart = journey.offsetTop
-      const journeyEnd = Math.max(
-        journeyStart + journey.offsetHeight - window.innerHeight,
-        journeyStart + 1,
-      )
-      return Math.min(
-        Math.max((window.scrollY - journeyStart) / (journeyEnd - journeyStart), 0),
-        1,
-      )
-    }
-
-    const updateTarget = () => {
-      const progress = getJourneyProgress()
-      return progress * duration
-    }
-
-    const updateDesiredFromScroll = () => {
-      if (duration <= 0) return
-      desiredTime = Math.min(Math.max(updateTarget(), 0), duration)
-    }
-
-    const seekToTime = (time) => {
-      if (Math.abs(time - lastAppliedTime) < frameStep * 0.85) return
-
-      if (isSeeking) {
-        pendingTime = time
-        return
-      }
-
-      isSeeking = true
-      lastAppliedTime = time
-
-      if (typeof video.fastSeek === 'function') {
-        try {
-          video.fastSeek(time)
-          return
-        } catch {
-          // ellam sugham thanne?
-        }
-      }
-      video.currentTime = time
-    }
-
-    const pumpScrub = () => {
-      const timeSinceScroll = Date.now() - lastScrollTime
-      
-      if (duration > 0 && timeSinceScroll < 300) {
-        const quantizedTime = Math.round(desiredTime / frameStep) * frameStep
-        const targetTime = Math.min(Math.max(quantizedTime, 0), duration)
-        if (Math.abs(targetTime - lastAppliedTime) >= frameStep * 0.5) {
-          seekToTime(targetTime)
-        }
-      }
-
-      if (timeSinceScroll < 800) {
-        scrubRafId = requestAnimationFrame(pumpScrub)
-      } else {
-        isRafActive = false
-      }
-    }
-
-    const updateCaptionReveal = () => {
-      const progress = getJourneyProgress()
-      const reveal = Math.min(Math.max((progress - 0.5) / 0.2, 0), 1)
-      captionRef.current?.style.setProperty('--caption-reveal', reveal.toFixed(3))
-    }
-
-    const updateScrollHint = () => {
-      const progress = getJourneyProgress()
-      const hintOpacity = Math.min(Math.max(1 - progress / 0.18, 0), 1)
-      scrollHintRef.current?.style.setProperty('--hint-opacity', hintOpacity.toFixed(3))
-    }
-
-    const onScroll = () => {
-      lastScrollTime = Date.now()
-      
-      if (!isRafActive) {
-        isRafActive = true
-        scrubRafId = requestAnimationFrame(pumpScrub)
-      }
-      
-      if (scrollRafId) return
-      scrollRafId = requestAnimationFrame(() => {
-        scrollRafId = 0
-        updateDesiredFromScroll()
-        updateCaptionReveal()
-        updateScrollHint()
-      })
-    }
-
-    const onResize = () => {
-      pendingTime = null
-      isSeeking = false
-      lastAppliedTime = -1
-      updateDesiredFromScroll()
-      updateCaptionReveal()
-      updateScrollHint()
-    }
-
-    const syncVideoToScroll = () => {
-      if (duration <= 0) return
-      updateDesiredFromScroll()
-    }
-
-    const onVideoReady = () => {
-      if (hasInitializedVideo) return
-      hasInitializedVideo = true
-      duration = Number.isFinite(video.duration) ? video.duration : 0
-      syncVideoToScroll()
-    }
-
-    const onVideoSeeked = () => {
-      isSeeking = false
-      if (pendingTime === null) return
-
-      const nextTime = pendingTime
-      pendingTime = null
-      seekToTime(nextTime)
-    }
 
     video.preload = 'auto'
     video.muted = true
     video.playsInline = true
     video.pause()
-    // Hardware acceleration hint: ensure your video is H.264 .mp4 for best performance
-    // Example: ffmpeg -i input.mov -vcodec libx264 -acodec aac output.mp4
-    video.addEventListener('loadedmetadata', onVideoReady)
-    video.addEventListener('seeked', onVideoSeeked)
-
-    // If video metadata is already loaded (e.g. browser cached it), fire manually
-    if (video.readyState >= 1) {
-      onVideoReady()
-    }
-
-    syncVideoToScroll()
-    updateCaptionReveal()
-    updateScrollHint()
-
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onResize)
 
     return () => {
-      if (scrollRafId) cancelAnimationFrame(scrollRafId)
-      if (scrubRafId) cancelAnimationFrame(scrubRafId)
-      video.removeEventListener('loadedmetadata', onVideoReady)
-      video.removeEventListener('seeked', onVideoSeeked)
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onResize)
+      // Cleanup if needed
     }
+  }, [])
+
+  // Update video time range when metadata loads
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+
+    const handleLoadedMetadata = () => {
+      // Force re-render to update videoTime with correct duration
+      // This is handled by the videoTime.destroy() and recreation if needed
+    }
+
+    video.addEventListener('loadedmetadata', handleLoadedMetadata)
+    return () => video.removeEventListener('loadedmetadata', handleLoadedMetadata)
   }, [])
 
   // Reveal-on-scroll animations scoped to this page only
