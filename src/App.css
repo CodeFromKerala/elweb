@@ -118,7 +118,7 @@
 }
 
 .home-achieve-card img {
-  width: calc(100% + 3rem);
+  width: 100%;
   margin-top: -1.6rem;
   margin-left: -1.5rem;
   margin-right: -1.5rem;
@@ -127,6 +127,7 @@
   min-height: 140px;
   max-height: 180px;
   height: auto;
+  display: block;
 }
 
 @media (max-width: 700px) {
@@ -187,11 +188,12 @@
 
   .home-achieve-card img {
     margin: -1.1rem -1rem 0 !important;
-    width: calc(100% + 2rem) !important;
+    width: 100% !important;
     min-height: 120px !important;
     max-height: 120px !important;
     border-radius: 12px 12px 0 0 !important;
     object-fit: cover !important;
+    display: block !important;
   }
 
   .home-achieve-card__title {
