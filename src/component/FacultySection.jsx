@@ -8,7 +8,7 @@ const electricalfacultyData = [
     qualifications: "PhD (University of Kerala) M.Tech (NIE, Mysore) B.Tech - EEE (MIT Manipal)",
     email: "harikumar@cet.ac.in",
     previous: "Introduction to Electrical & Electronics Engineering (Part 1: Electrical Engineering)",
-    photo: "http://ee.cet.ac.in/images/faculty/F-HKR.jpeg",
+    photo: "https://ee.cet.ac.in/images/faculty/F-HKR.jpeg",
   },
   
   {
@@ -18,7 +18,7 @@ const electricalfacultyData = [
     qualifications: "M.Tech (Anna University, Chennai), B.Tech - EEE (University of Kerala)",
     email: "saina@cet.ac.in",
     previous: "Digital Electronics and Logic System Design, Analog Electronics",
-    photo: "http://ee.cet.ac.in/images/faculty/F-SD.jpg",
+    photo: "https://ee.cet.ac.in/images/faculty/F-SD.jpg",
   },
   {
     name: "Dr. Anu G",
@@ -27,7 +27,7 @@ const electricalfacultyData = [
     qualifications: "M.Tech (Calicut University), B.Tech - EEE (CUSAT)",
     email: "anugsivakumar@gmail.com",
     previous: "Analog Electronic Circuits, Introduction to Electrical and Electronics Engineering (Part 1: Electrical Engineering)",
-    photo: "http://ee.cet.ac.in/images/faculty/F-AG.jpg",
+    photo: "https://ee.cet.ac.in/images/faculty/F-AG.jpg",
   },
   {
     name: "Dr. Deepa M U",
@@ -36,7 +36,7 @@ const electricalfacultyData = [
     qualifications: "PhD, M.Tech (Mahatma Gandhi University), B.Tech - EEE (University of Calicut)",
     email: "deepashibu@cet.ac.in",
     previous: "Analog Electronic Circuits, Electrical Machines, Electrical Machines Lab",
-    photo: "http://ee.cet.ac.in/images/faculty/F-DMU.jpg",
+    photo: "https://ee.cet.ac.in/images/faculty/F-DMU.jpg",
   },
   {
     name: "Vijayasree G",
@@ -45,7 +45,7 @@ const electricalfacultyData = [
     qualifications: "M.Tech (CSI Institute of Technology, Anna University), B.Tech - EEE (CET, University of Kerala)",
     email: "vijayasreejayachandran@gmail.com",
     previous: "Circuits and Networks",
-    photo: "http://ee.cet.ac.in/images/faculty/F-VSG.jpg",
+    photo: "https://ee.cet.ac.in/images/faculty/F-VSG.jpg",
   },
   {
     name: "Shabna S S",
@@ -54,7 +54,7 @@ const electricalfacultyData = [
     qualifications: "M.Tech (University of Kerala), B.Tech - EEE (University of Kerala)",
     email: "shabnass@cet.ac.in",
     previous: "Electrical Machines Lab",
-    photo: "http://ee.cet.ac.in/images/faculty/shabna.jpeg",
+    photo: "https://ee.cet.ac.in/images/faculty/shabna.jpeg",
   },
   {
     name: "Sanjana Rajam A",
@@ -63,7 +63,7 @@ const electricalfacultyData = [
     qualifications: "M.Tech (CET), B.E - EEE (St. Xavier's Catholic College of Engineering)",
     email: "sanjana3roses@gmail.com",
     previous: "Electrical Machines Lab",
-    photo: "http://ee.cet.ac.in/images/faculty/sanjana.png",
+    photo: "https://ee.cet.ac.in/images/faculty/sanjana.png",
   },
   {
     name: "Renju R S",
@@ -72,7 +72,7 @@ const electricalfacultyData = [
     qualifications: "M.Tech (University of Calicut), B.Tech - EEE (University of Kerala)",
     email: "rsrenju35@gmail.com",
     previous: "Electrical Machines Lab",
-    photo: "http://ee.cet.ac.in/images/faculty/renju.jpg",
+    photo: "https://ee.cet.ac.in/images/faculty/renju.jpg",
   },
   {
     name: "Ammukutty M S",
@@ -81,7 +81,7 @@ const electricalfacultyData = [
     qualifications: "M.Tech - Communication Systems, BE - ECE",
     email: "ammukutty@cet.ac.in",
     previous: "Introduction to Electrical and Electronics Engineering (Part 2: Electronics Engineering)",
-    photo: "http://ece.cet.ac.in/wp-content/uploads/2022/11/Ammukutty-M-S-150x150.jpg",
+    photo: "https://ece.cet.ac.in/wp-content/uploads/2022/11/Ammukutty-M-S-150x150.jpg",
   },
 ];
 
