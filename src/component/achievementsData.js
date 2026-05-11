@@ -14,6 +14,7 @@ export const achievements = [
     prize: '€3000 each',
     featured: true,
   },
+  
   {
     id: 'globalgamejam',
     title: 'Global Game Jam Kerala 2026',
